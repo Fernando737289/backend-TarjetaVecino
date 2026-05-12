@@ -14,6 +14,4 @@ pip install -r requirements.txt
 uvicorn main:app --reload
 ```
 
-```markdown
-El servidor estará disponible en `http://127.0.0.1:8000`.
-```
+El servidor estará disponible en http://127.0.0.1:8000.
