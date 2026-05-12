@@ -21,3 +21,23 @@ rad.json
 *.flf
 #Test results file
 TestResults.xml
+#entornovirtual
+.venv/
+venv/
+#cache de python
+__pycache__/
+*.pyc
+# Variables de entorno
+.env
+
+# Configuración VSCode
+.vscode/
+
+# Archivos temporales
+*.log
+
+# Pytest
+.pytest_cache/
+
+# Mypy
+.mypy_cache/
