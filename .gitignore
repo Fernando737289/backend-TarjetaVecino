@@ -1,7 +1,5 @@
 ### AL ###
 #Template for AL projects for Dynamics 365 Business Central
-#launch.json folder
-.vscode/
 #Cache folder
 .alcache/
 #Symbols folder
@@ -29,15 +27,11 @@ __pycache__/
 *.pyc
 # Variables de entorno
 .env
-
 # Configuración VSCode
 .vscode/
-
 # Archivos temporales
 *.log
-
 # Pytest
 .pytest_cache/
-
 # Mypy
 .mypy_cache/
