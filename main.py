@@ -10,3 +10,4 @@ app.include_router(db_conection.router)
 @app.get("/")
 def read_root():
     return {"msg": "Bienvenido a la API"}
+
