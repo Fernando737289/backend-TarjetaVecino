@@ -23,8 +23,7 @@ def database_connection():
     
     except Exception as error:
         
-     
-        return{
+        return {
+            
             "error": str(error)
         }
-    
