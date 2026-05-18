@@ -1,7 +1,7 @@
 from app.core.database import get_connection
 from fastapi import HTTPException
 
-
+#crear persona
 def create_user(user):
     
     try:
@@ -56,7 +56,7 @@ def create_user(user):
             detail = "Error al crear un usuario"
         )
 
-
+#listar todas las personas.
 def list_users():
     
     try:
@@ -82,7 +82,8 @@ def list_users():
             status_code = 500,
             detail = "Error al obtener personas"
         )
-        
+
+#actualizae persona por su id.     
 def update_user(id_persona, user):
     
     try:
@@ -144,7 +145,8 @@ def update_user(id_persona, user):
             status_code = 500,
             detail = "Error al actualizar usuario"
         )
-        
+
+#eliminar persona por su id.      
 def delete_user(id_persona):
     
     try:

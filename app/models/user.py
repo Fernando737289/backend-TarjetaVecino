@@ -1,6 +1,7 @@
 from pydantic import BaseModel, EmailStr
 from datetime import date
 
+#el modelo que pasaremos por json de persona
 class User(BaseModel):
     
     
