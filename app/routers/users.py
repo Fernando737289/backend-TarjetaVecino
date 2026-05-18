@@ -7,6 +7,7 @@ router = APIRouter(
     tags=["Users"]
 )
 
+#ruta crud para persona
 @router.post("/")
 def create_new_user(user: User):
     return create_user(user)
