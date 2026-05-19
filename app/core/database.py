@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-
+#funcion para la conexion a base de datos
 def get_connection():
 
     conexion = mysql.connector.connect(

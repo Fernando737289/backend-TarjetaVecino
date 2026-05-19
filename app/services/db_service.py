@@ -1,6 +1,6 @@
 from app.core.database import get_connection
 
-
+#prueba de conexion a base de datos.
 def database_connection():
     
     try:
