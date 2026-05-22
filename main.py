@@ -1,11 +1,12 @@
 from fastapi import FastAPI
-from app.routers import db_conection, users
+from app.routers import db_conection, users, qr_router
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="Mi API")
 
 app.include_router(users.router)
 app.include_router(db_conection.router)
+app.include_router(qr_router.router)
 
 app.add_middleware(
     CORSMiddleware,
