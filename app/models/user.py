@@ -4,7 +4,6 @@ from datetime import date
 #el modelo que pasaremos por json de persona
 class User(BaseModel):
     
-    
     rut: str
     nombres: str
     apellidos: str
