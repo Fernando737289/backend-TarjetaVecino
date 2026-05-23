@@ -31,17 +31,22 @@ def verificar_tarjeta_existente(id_persona: int):
     return tarjeta
 
 
+<<<<<<< HEAD
 def create_tarjeta(
     rut: str,
     nombres: str,
     apellidos: str,
     telefono: str | None = None
 ):
+=======
+def create_tarjeta(rut: str):
+>>>>>>> d346762 (Feature/qr (#13))
     
     try:
         
         persona = get_persona_by_rut(rut)
         
+<<<<<<< HEAD
         if persona["nombres"].strip().lower() != nombres.strip().lower():
 
             raise HTTPException(
@@ -67,6 +72,8 @@ def create_tarjeta(
                     detail="El teléfono no coincide con los registros"
                 )
         
+=======
+>>>>>>> d346762 (Feature/qr (#13))
         tarjeta_existente = verificar_tarjeta_existente(
             persona["id_persona"]
         )
@@ -136,7 +143,11 @@ def create_tarjeta(
         )
         
         
+<<<<<<< HEAD
 def get_tarjeta(rut: str):
+=======
+def get_tarjeta(id_tarjeta: int):
+>>>>>>> d346762 (Feature/qr (#13))
     
     
     try:
@@ -164,10 +175,17 @@ def get_tarjeta(rut: str):
             INNER JOIN persona p
                 ON t.id_persona = p.id_persona
                 
+<<<<<<< HEAD
             WHERE p.rut = %s
         """
         
         cursor.execute(query, (rut,))
+=======
+            WHERE t.id_tarjeta = %s
+        """
+        
+        cursor.execute(query, (id_tarjeta,))
+>>>>>>> d346762 (Feature/qr (#13))
         
         tarjeta = cursor.fetchone()
         
@@ -181,6 +199,7 @@ def get_tarjeta(rut: str):
                 detail="Tarjeta no encontrada"
             )
             
+<<<<<<< HEAD
         return {
             "nombres": tarjeta["nombres"],
             "apellidos": tarjeta["apellidos"],
@@ -189,6 +208,9 @@ def get_tarjeta(rut: str):
             "codigo_qr": tarjeta["codigo_qr"],
             "vigencia": tarjeta["fecha_vencimiento"]
         }
+=======
+        return tarjeta
+>>>>>>> d346762 (Feature/qr (#13))
     
     except HTTPException:
         raise
@@ -201,6 +223,7 @@ def get_tarjeta(rut: str):
         )
         
         
+<<<<<<< HEAD
 def update_tarjeta(id_tarjeta: int, estado: str, fecha_vencimiento):
     
     try:
@@ -330,3 +353,6 @@ def delete_tarjeta(id_tarjeta: int):
             status_code=500,
              detail="Error al eliminar la tarjeta"
         )
+=======
+        
+>>>>>>> d346762 (Feature/qr (#13))
