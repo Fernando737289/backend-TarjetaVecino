@@ -1,5 +1,6 @@
 import qrcode
 from io import BytesIO
+import base64
 
 from fastapi import HTTPException
 from app.core.database import get_connection
@@ -15,9 +16,11 @@ def get_persona_by_rut(rut: str):
         
         query = """
             SELECT
+                id_persona,
                 rut,
                 nombres,
-                apellidos
+                apellidos,
+                telefono
             FROM persona
             WHERE rut = %s
         """
@@ -75,4 +78,8 @@ def generar_qr(persona):
     
     buffer.seek(0)
     
-    return buffer
+    base64_qr = base64.b64encode(
+        buffer.getvalue()
+    ).decode("utf-8")
+    
+    return base64_qr
