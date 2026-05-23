@@ -8,13 +8,13 @@ router = APIRouter(
 )
 
 #ruta crud para persona
-@router.post("/")
-def create_new_user(user: User):
-    return create_user(user)
-
 @router.get("/")
 def list_all_users():
     return list_users()
+
+@router.post("/crear")
+def create_new_user(user: User):
+    return create_user(user)
 
 @router.put("/{id_persona}")
 def update_users(id_persona: int, user: User):
