@@ -30,18 +30,19 @@ def verificar_tarjeta_existente(id_persona: int):
 
     return tarjeta
 
-
 def create_tarjeta(
     rut: str,
     nombres: str,
     apellidos: str,
     telefono: str | None = None
 ):
+
     
     try:
         
         persona = get_persona_by_rut(rut)
         
+
         if persona["nombres"].strip().lower() != nombres.strip().lower():
 
             raise HTTPException(
@@ -66,7 +67,7 @@ def create_tarjeta(
                     status_code=400,
                     detail="El teléfono no coincide con los registros"
                 )
-        
+
         tarjeta_existente = verificar_tarjeta_existente(
             persona["id_persona"]
         )
@@ -135,9 +136,9 @@ def create_tarjeta(
             detail=f"Error al crear tarjeta: {str(e)}"
         )
         
-        
+
 def get_tarjeta(rut: str):
-    
+
     
     try:
         
@@ -164,11 +165,12 @@ def get_tarjeta(rut: str):
             INNER JOIN persona p
                 ON t.id_persona = p.id_persona
                 
+
             WHERE p.rut = %s
         """
         
         cursor.execute(query, (rut,))
-        
+                   
         tarjeta = cursor.fetchone()
         
         cursor.close()
@@ -181,6 +183,7 @@ def get_tarjeta(rut: str):
                 detail="Tarjeta no encontrada"
             )
             
+
         return {
             "nombres": tarjeta["nombres"],
             "apellidos": tarjeta["apellidos"],
@@ -189,7 +192,7 @@ def get_tarjeta(rut: str):
             "codigo_qr": tarjeta["codigo_qr"],
             "vigencia": tarjeta["fecha_vencimiento"]
         }
-    
+  
     except HTTPException:
         raise
     
