@@ -8,7 +8,7 @@ def create_beneficio(data):
 
         conexion = get_connection()
 
-        cursor = conexion.cursor()
+        cursor = conexion.cursor(dictionary=True)
 
         query = """
             INSERT INTO beneficios(
