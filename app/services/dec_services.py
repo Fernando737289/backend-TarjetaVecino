@@ -1,12 +1,18 @@
+import os
 from pydantic import BaseModel
 import httpx
 from fastapi import HTTPException, status
+from dotenv import load_dotenv
 
-URL_DEC = "https://5dev.dec.cl/api/v1/auth/validate_vigencia"
+load_dotenv()
 
-async def validar_vigencia_rut(user_rut: str, serial_number: str, api_key: str) -> dict:
+URL_DEC = os.getenv("URL_API")
+DEC_API_KEY = os.getenv("DEC_API_KEY")
+
+async def validar_vigencia_rut(user_rut: str, serial_number: str, api_key: str = None) -> dict:
     headers = {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "X-API-KEY": api_key if api_key is not None else DEC_API_KEY
     }
     
     payload = {
