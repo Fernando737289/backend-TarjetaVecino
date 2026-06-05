@@ -328,5 +328,5 @@ def delete_tarjeta(id_tarjeta: int):
 
         raise HTTPException(
             status_code=500,
-             detail="Error al eliminar la tarjeta"
+            detail="Error al eliminar la tarjeta"
         )
