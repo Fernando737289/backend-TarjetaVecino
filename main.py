@@ -4,7 +4,8 @@ from app.routers import (
     users,
     qr_router,
     tarjeta_router,
-    beneficio_router
+    beneficio_router,
+    verificacion_router
 )
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -15,6 +16,7 @@ app.include_router(db_conection.router)
 app.include_router(qr_router.router)
 app.include_router(tarjeta_router.router)
 app.include_router(beneficio_router.router)
+app.include_router(verificacion_router.router)
 
 app.add_middleware(
     CORSMiddleware,

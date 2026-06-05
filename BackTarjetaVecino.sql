@@ -34,7 +34,7 @@ CREATE TABLE `auditoria` (
   `descripcion` text,
   `usuario_accion` varchar(100) DEFAULT NULL,
   `fecha_accion` timestamp NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -53,7 +53,7 @@ CREATE TABLE `beneficios` (
   `fecha_vencimiento` date DEFAULT NULL,
   `comercio` varchar(150) DEFAULT NULL,
   `estado` enum('activo','inactivo') DEFAULT 'activo'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -73,7 +73,7 @@ CREATE TABLE `persona` (
   `fecha_nacimiento` date DEFAULT NULL,
   `estado` enum('activo','inactivo') DEFAULT 'activo',
   `fecha_creacion` timestamp NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `persona`
@@ -97,7 +97,7 @@ CREATE TABLE `tarjeta` (
   `fecha_emision` date NOT NULL,
   `fecha_vencimiento` date NOT NULL,
   `estado` enum('activa','bloqueada','vencida') DEFAULT 'activa'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `tarjeta`
