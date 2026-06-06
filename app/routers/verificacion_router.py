@@ -16,7 +16,7 @@ async def validar_cedula(payload: VerificacionCedulaSchema):
         
     )
     
-    if not resultado or resultado.get("status") != "success":
+    if not resultado or resultado.get("status") != 200:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=resultado.get("message", "No se pudo completar la verificación.")
@@ -25,7 +25,7 @@ async def validar_cedula(payload: VerificacionCedulaSchema):
     result_data = resultado.get("result", {})
     
     return {
-        "valido": result_data.get("Verificacion") == "Vigente",
+        "valido": result_data.get("Verificacion") == "V",
         "detalle": result_data.get("Glosa"),
         "datos_completos": result_data
     }
