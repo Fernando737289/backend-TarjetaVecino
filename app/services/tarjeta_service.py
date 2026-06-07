@@ -211,7 +211,8 @@ def get_tarjeta(
             "rut": tarjeta["rut"],
             "numero_tarjeta": tarjeta["numero_tarjeta"],
             "codigo_qr": tarjeta["codigo_qr"],
-            "vigencia": tarjeta["fecha_vencimiento"]
+            "vigencia": tarjeta["fecha_vencimiento"],
+            "estado": tarjeta["estado"]
         }
 
     except HTTPException:
