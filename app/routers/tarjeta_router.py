@@ -25,10 +25,16 @@ def crear_tarjeta(data: CreateTarjetaRequest):
     )
 
 
-@router.get("/rut/{rut}")
-def obtener_tarjeta(rut: str):
+@router.get("/buscar")
+def obtener_tarjeta(
+    rut: str | None = None,
+    numero_tarjeta: str | None = None
+):
 
-    return get_tarjeta(rut)
+    return get_tarjeta(
+        rut=rut,
+        numero_tarjeta=numero_tarjeta
+    )
 
 
 @router.put("/{id_tarjeta}")
