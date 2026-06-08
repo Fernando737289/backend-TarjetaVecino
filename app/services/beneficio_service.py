@@ -86,3 +86,75 @@ def list_beneficios():
             status_code=500,
             detail="Error al obtener beneficios"
         )
+
+def delete_beneficio(id_beneficio: int):
+
+    try:
+
+        conexion = get_connection()
+
+        cursor = conexion.cursor()
+
+        query = """
+            UPDATE beneficios
+            SET estado = 'inactivo'
+            WHERE id = %s
+        """
+
+        cursor.execute(query, (id_beneficio,))
+
+        conexion.commit()
+
+        cursor.close()
+        conexion.close()
+
+        return {
+            "mensaje": "Beneficio eliminado correctamente"
+        }
+
+    except Exception:
+
+        raise HTTPException(
+            status_code=500,
+            detail="Error al eliminar beneficio"
+        )
+
+def update_beneficio(id_beneficio: int, data):
+
+    try:
+
+        conexion = get_connection()
+
+        cursor = conexion.cursor()
+
+        query = """
+            UPDATE beneficios
+            SET nombre = %s,
+                descripcion = %s
+            WHERE id = %s
+        """
+
+        cursor.execute(
+            query,
+            (
+                data.nombre,
+                data.descripcion,
+                id_beneficio
+            )
+        )
+
+        conexion.commit()
+
+        cursor.close()
+        conexion.close()
+
+        return {
+            "mensaje": "Beneficio actualizado correctamente"
+        }
+
+    except Exception:
+
+        raise HTTPException(
+            status_code=500,
+            detail="Error al actualizar beneficio"
+        )
