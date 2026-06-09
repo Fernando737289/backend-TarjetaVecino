@@ -28,9 +28,26 @@ async def create_user(user):
         
         cursor = conexion.cursor(dictionary=True)
         
+        cursor.execute(
+            """
+            SELECT id_persona
+            FROM persona
+            WHERE rut = %s
+            """,
+            (user.rut,)
+        )
+
+        if cursor.fetchone():
+
+            raise HTTPException(
+                status_code=400,
+                detail="Ya existe una persona registrada con ese RUT"
+            )
+        
         query = """
             INSERT INTO persona (
                 rut,
+                serial_number,
                 nombres,
                 apellidos,
                 direccion,
@@ -39,11 +56,12 @@ async def create_user(user):
                 email,
                 fecha_nacimiento
             )
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
         """
         
         values = (
             user.rut,
+            user.serial_number,
             user.nombres,
             user.apellidos,
             user.direccion,
