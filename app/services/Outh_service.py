@@ -1,5 +1,4 @@
 import bcrypt
-from app.models import Outh_Model
 from fastapi import HTTPException
 from app.core.database import get_connection
 
