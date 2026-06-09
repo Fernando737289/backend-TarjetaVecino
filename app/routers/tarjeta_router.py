@@ -7,6 +7,7 @@ from app.services.tarjeta_service import (
     update_tarjeta,
     delete_tarjeta
 )
+from app.services.vigencia_service import validar_vigencia
 
 router = APIRouter(
     prefix="/tarjeta",
@@ -45,3 +46,18 @@ def actualizar_tarjeta(id_tarjeta: int, data: UpdateTarjetaRequest):
 def eliminar_tarjeta(id_tarjeta: int):
 
     return delete_tarjeta(id_tarjeta)
+
+##prueba con apikey
+
+@router.post("/validar-vigencia")
+async def validar(data: dict):
+
+    api_key = "TU_API_KEY"
+
+    resultado = await validar_vigencia(
+        data["user_rut"],
+        data["serial_number"],
+        api_key
+    )
+
+    return resultado
