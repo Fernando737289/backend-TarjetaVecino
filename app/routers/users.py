@@ -12,9 +12,10 @@ router = APIRouter(
 def list_all_users():
     return list_users()
 
-@router.post("/crear")
-def create_new_user(user: User):
-    return create_user(user)
+@router.post("/usuarios")
+async def registrar_usuario(payload: User):
+    nuevo_usuario = await create_user(payload)
+    return nuevo_usuario
 
 @router.put("/{id_persona}")
 def update_users(id_persona: int, user: User):

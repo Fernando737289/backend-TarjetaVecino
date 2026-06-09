@@ -4,7 +4,7 @@ from app.routers import (
     users,
     qr_router,
     tarjeta_router,
-    beneficio_router
+    beneficio_router,
     verificacion_router
 )
 from fastapi.middleware.cors import CORSMiddleware

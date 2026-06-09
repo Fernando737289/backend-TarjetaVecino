@@ -5,8 +5,11 @@ from datetime import date
 class User(BaseModel):
     
     rut: str
+    serial_number: str
+    
     nombres: str
     apellidos: str
+    
     direccion: str | None = None
     numero_direccion: str | None = None
     telefono: str | None = None
