@@ -37,6 +37,7 @@ def obtener_tarjeta(
     )
 
 
+
 @router.put("/{id_tarjeta}")
 def actualizar_tarjeta(id_tarjeta: int, data: UpdateTarjetaRequest):
 

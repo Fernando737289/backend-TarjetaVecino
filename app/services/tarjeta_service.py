@@ -215,7 +215,6 @@ def get_tarjeta(
             "vigencia": tarjeta["fecha_vencimiento"],
             "estado": tarjeta["estado"]
         }
-
     except HTTPException:
         raise
 
