@@ -1,10 +1,28 @@
 from app.core.database import get_connection
 from fastapi import HTTPException
+from app.services.dec_services import validar_vigencia_rut
 
-#crear persona
-def create_user(user):
-    
+async def create_user(user):
     try:
+        
+        resultado_dec = await validar_vigencia_rut(
+            user_rut=user.rut,
+            serial_number=user.serial_number  
+        )
+        
+       
+        if not resultado_dec or resultado_dec.get("status") != 200:
+            raise HTTPException(
+                status_code=400, 
+                detail="No se pudo verificar la cédula con el servicio externo."
+            )
+            
+        result_data = resultado_dec.get("result", {})
+        if result_data.get("Verificacion") != "V":
+            raise HTTPException(
+                status_code=400, 
+                detail="La cédula de identidad no se encuentra vigente en el Registro Civil."
+            )
     
         conexion = get_connection()
         
@@ -39,24 +57,22 @@ def create_user(user):
         
         conexion.commit()
         
-        user_id = cursor.lastrowid
+        return {"status": "success", "message": "Persona creada exitosamente tras validación de cédula."}
         
-        cursor.close()
-        conexion.close()
+    except HTTPException as http_err:
         
-        return {
-            "id_persona": user_id,
-            "mensaje": "Usuario creado correctamente"
-        }
-        
-    except Exception:
-        
+        raise http_err
+    except Exception as e:
         raise HTTPException(
-            status_code = 500,
-            detail = "Error al crear un usuario"
+            status_code=500, 
+            detail=f"Error interno al registrar en la base de datos: {str(e)}"
         )
+    finally:
 
-#listar todas las personas.
+        if 'cursor' in locals(): cursor.close()
+        if 'conexion' in locals(): conexion.close()
+
+
 def list_users():
     
     try:
@@ -83,7 +99,7 @@ def list_users():
             detail = "Error al obtener personas"
         )
 
-#actualizae persona por su id.     
+    
 def update_user(id_persona, user):
     
     try:
@@ -146,7 +162,7 @@ def update_user(id_persona, user):
             detail = "Error al actualizar usuario"
         )
 
-#eliminar persona por su id.      
+     
 def delete_user(id_persona):
     
     try:
