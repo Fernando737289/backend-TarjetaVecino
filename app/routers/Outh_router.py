@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
-from app.models.auth_model import CreateUsuarioRequest
-from app.services.auth_service import create_usuario
+from app.models.Outh_Model import CreateUsuarioRequest
+from app.services.Outh_service import create_usuario
 
 router = APIRouter(
     prefix="/auth",

@@ -1,5 +1,4 @@
 import bcrypt
-
 from fastapi import HTTPException
 from app.core.database import get_connection
 
@@ -14,13 +13,13 @@ def create_usuario(data):
         query_verificar = """
             SELECT id_usuario
             FROM usuario
-            WHERE usuario = %s
-               OR correo = %s
+            WHERE username = %s
+               OR email = %s
         """
 
         cursor.execute(
             query_verificar,
-            (data.usuario, data.correo)
+            (data.username, data.email)
         )
 
         existe = cursor.fetchone()
@@ -34,21 +33,21 @@ def create_usuario(data):
 
         password_hash = bcrypt.hashpw(
             data.password.encode("utf-8"),
-            bcrypt.gensalt()
+            bcrypt.gensalt(rounds=14)
         ).decode("utf-8")
 
         query = """
             INSERT INTO usuario(
-                usuario,
-                correo,
+                username,
+                email,
                 password_hash
             )
             VALUES(%s,%s,%s)
         """
 
         values = (
-            data.usuario,
-            data.correo,
+            data.username,
+            data.email,
             password_hash
         )
 
