@@ -6,7 +6,8 @@ from app.routers import (
     tarjeta_router,
     beneficio_router,
     verificacion_router,
-    Outh_router
+    Outh_router,
+    auth_router
 )
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -19,6 +20,7 @@ app.include_router(tarjeta_router.router)
 app.include_router(beneficio_router.router)
 app.include_router(verificacion_router.router)
 app.include_router(Outh_router.router)
+app.include_router(auth_router.router)
 
 app.add_middleware(
     CORSMiddleware,
