@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: mysql
--- Tiempo de generación: 07-06-2026 a las 23:36:16
+-- Tiempo de generación: 10-06-2026 a las 05:04:09
 -- Versión del servidor: 8.0.46
 -- Versión de PHP: 8.3.26
 
@@ -55,6 +55,18 @@ CREATE TABLE `beneficios` (
   `estado` enum('activo','inactivo') COLLATE utf8mb4_unicode_ci DEFAULT 'activo'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Volcado de datos para la tabla `beneficios`
+--
+
+INSERT INTO `beneficios` (`id_beneficio`, `nombre`, `descripcion`, `tipo_descuento`, `valor_descuento`, `stock`, `fecha_inicio`, `fecha_vencimiento`, `comercio`, `estado`) VALUES
+(1, 'Piscina Municipal', '50% de descuento en el ingreso a la piscina municipal', 'porcentaje', 50.00, 500, '2026-06-01', '2026-12-31', 'Municipalidad de San Bernardo', 'activo'),
+(2, 'Talleres Culturales', 'Acceso gratuito a talleres de pintura, teatro y musica', 'monto_fijo', 10000.00, 200, '2026-06-01', '2026-12-31', 'Centro Cultural Municipal', 'activo'),
+(3, 'Libreria Escolar', 'Descuento para la compra de utiles y libros escolares', 'porcentaje', 15.00, 300, '2026-06-01', '2026-12-31', 'Libreria Educativa San Bernardo', 'activo'),
+(4, 'Farmacia Municipal', '20% de descuento en medicamentos seleccionados', 'porcentaje', 20.00, 1000, '2026-06-01', '2026-12-31', 'Farmacia Municipal San Bernardo', 'activo'),
+(5, 'Cine Vecino', 'Promocion 2x1 en entradas de cine', '2x1', 0.00, 400, '2026-06-01', '2026-12-31', 'Cine San Bernardo', 'activo'),
+(6, 'Actividades Deportivas', 'Descuento en talleres y actividades deportivas municipales', 'porcentaje', 30.00, 250, '2026-06-01', '2026-12-31', 'Departamento de Deportes', 'activo');
+
 -- --------------------------------------------------------
 
 --
@@ -64,6 +76,7 @@ CREATE TABLE `beneficios` (
 CREATE TABLE `persona` (
   `id_persona` int NOT NULL,
   `rut` varchar(12) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `serial_number` varchar(500) COLLATE utf8mb4_unicode_ci NOT NULL,
   `nombres` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `apellidos` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `direccion` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -79,9 +92,10 @@ CREATE TABLE `persona` (
 -- Volcado de datos para la tabla `persona`
 --
 
-INSERT INTO `persona` (`id_persona`, `rut`, `nombres`, `apellidos`, `direccion`, `numero_direccion`, `telefono`, `email`, `fecha_nacimiento`, `estado`, `fecha_creacion`) VALUES
-(4, '21817151-6', 'Fernando Manuel', 'Maturana Hidalgo', 'example', '4564', '382794627834', 'ejemplo@gmail.com', '2026-05-22', 'activo', '2026-05-22 03:10:45'),
-(5, '20.954.697-3', 'guillermo eduardo', 'gonzalez', 'ejemplo', '5678', '12345657876', 'ejemplo@ejemplo.com', '2026-05-03', 'activo', '2026-05-22 21:45:50');
+INSERT INTO `persona` (`id_persona`, `rut`, `serial_number`, `nombres`, `apellidos`, `direccion`, `numero_direccion`, `telefono`, `email`, `fecha_nacimiento`, `estado`, `fecha_creacion`) VALUES
+(11, '14187947-2', 'gAAAAABqKO64N3o5wadk1JP9zRU-_DBuEC7WTAZGvv6G3kNI4loEi0z0bNyYYwNgv2vG7yWFLbE4iWI6RS4n9zG-IH75iH8lqA==', 'Francisco', 'Baez', 'string', 'string', 'string', 'user@example.com', '2026-06-10', 'activo', '2026-06-10 04:57:28'),
+(12, '20954697-3', 'gAAAAABqKO7p-VeKCSXQX3s52LuBkLWeJIFwhZlUm9hZCDrINI8afnNMhMEdPfgBzlA_ybXODJCe8xmV36BipjOZbL4J8RWy9A==', 'guille', 'gonzalez', 'string', 'string', 'string', 'user@example.com', '2026-06-10', 'activo', '2026-06-10 04:58:17'),
+(13, '21817151-6', 'gAAAAABqKO8Z_nE3zmptJOgoF-VIYvSddXcsMJb_MlIyH6hTgMZV62QFyWKELIlirApZHzvcfyQqkWxkEVB2esN8ihiOXRD81w==', 'Fernando', 'Maturana', 'string', 'string', 'string', 'user@example.com', '2026-06-10', 'activo', '2026-06-10 04:59:05');
 
 -- --------------------------------------------------------
 
@@ -99,14 +113,6 @@ CREATE TABLE `tarjeta` (
   `estado` enum('activa','bloqueada','vencida') COLLATE utf8mb4_unicode_ci DEFAULT 'activa'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Volcado de datos para la tabla `tarjeta`
---
-
-INSERT INTO `tarjeta` (`id_tarjeta`, `id_persona`, `numero_tarjeta`, `codigo_qr`, `fecha_emision`, `fecha_vencimiento`, `estado`) VALUES
-(2, 4, '797161', 'iVBORw0KGgoAAAANSUhEUgAAAcIAAAHCAQAAAABUY/ToAAADi0lEQVR4nO2cXYrrSAxGj8aGfrRhFpCl2DuYJQ29M3spvYCB8mNDGc1DqfyT9GXgktCdzKeHELtyqBiE9ElVZXN+z+Y/fhMEkSJFihQpUqTIn0daWAuzmcVHD8zWYmYtNi71V+M3/1uRP4vE3d0Z3N09Ne7uGQbP+ERTBk6j9XJ6rucU+XhyqfFlthaflje3vxOUYLRZCVX3mlPka5LFc2A15kvGp6WNy8fNKfK5yfb2VpMNwFkM6P4xoLltIz3Xc4p8PNm5+wT4e09IIWiKCirCegSKWrrXnCJfipzNzKyPXFY+RsDGpYUhAbCWsuxec4p8EbLksj1T+XzJFCkEGeg+DboMdOd89lzPKfLRpFlPtIZYWhg+an8IYsCn7Xf3mVPkq5ClPxQCqPNNBW2jqXGGtPWREqg/JPIL0kaA4aPF3T/Nxi7jU+dudqkieu5X8/f+bnOKfBUy9ND8V8Lny6c5S4+z/OkMH212AGcBWN4cuoR9378V+ZPJxczGpcVGGmfuV7Ox+4xabexqMBrSqrpM5JUVnQPEKpmn6CcWURT3IFpInYdJD4msVn0opPOh21i8qXhOJu5pzVXkjUVYKf6SYUhNdSnfLFEi0mFAPiTyRNrIalU15yJ7/L22i8x6YvU1Otbf+29F/izyEIdO3/KxNTTVACU9JPILqz5RvWTT1KefRLuoXCuXibwlbaxpzOzyaRGMto2L0JQtaYci7imfU+QjyGMum9jKes/XAyGskzS1yGvbK69IaO4hrAFiqSyd913Lh0QeLTyiCxFdVPMEHGLTUNQSoNpe5K3tTaBDB4gu1+iTto51Uo9R5Je2q2af9rvdMW9FfqPxqPLlQyKPtpdakdWonaKJaA0dPGc3+ZDIahFp0i6d44zivupR5RHRJFIcEnmy3YfCc0pZn6s37fsYy7dGcUjkL8jGfVrefL9k7mvHeu4bN+vPBxWf9DlF3p3krHI2/Uwt5rt8qMYOx+8Vh0SeyMN7P1jMSi57v8SuIeZ+jQMfc699jCKv7dh/rgsZdQMIWzVWG9iDq7YXeW1HTb2t2287PvZTQsV0Nkjkf5NzT2Sw4aMtcjoWPFIduPucIp+avHnvx5B6Y5hyCzS5HgZazcuJ6i5X4rmeU+TjyBs9VO5tymioXaG9NaRcJvIrcnvvR/GXOGq/WryzgdWOJdl95hT5IqTpHeciRYoUKVKkyP85+S991VnDtXCPsQAAAABJRU5ErkJggg==', '2026-05-22', '2027-05-22', 'activa'),
-(4, 5, '753619', 'iVBORw0KGgoAAAANSUhEUgAAAcIAAAHCAQAAAABUY/ToAAADfElEQVR4nO2cz23jPBDF36wE5CgBLsCl0B18JX01bQdiKSlgAeoYgMLsYTgk5U0u2QixvG8OhmXzB4nAw3D+kBLF5yz++CQIkCRJkiRJkiRJPh4pxUYgioh/jOg+sPqo2zc/LcnHIqGqqgiqqpoGVdUMBM3QZSq/IaSh/uuDl3PNk+Tx5Or+JcoIXdYXlf8TgHh9kzbaXNVX3ZPkc5Dj3bWENAPAJhrnBME0KOI8fOU9ST49OajIDACriGrazA/J7ch7kjwx6X5oUgAroHEeoPE2ZMGUgHgbFJgSFCvQFyTPNU+Sx5Elpi5W4ucPPnwUY2qSvZkfav5F4zUD8ZqhwJsoVgCY3kT3Xuhs8yR5NGkBUBQRYB2B8CqCOAMi1wzEuYwugdKX3JPks5C2llkZCJMqAK8FLW1IgpWLbEHjWkZyZyahZcrQxS6zq2SqxUf/zRBqiOTOiobgRWhM2RwPQqpeyuXT6YoaIunW1jJbvIJ9K10PW8aKhlonhBoi2VlpgaW2qrlelsk7Z6oZwFT+LePONU+Sx5G9ckxIXTjd4my/DOy5kvzDWhTU8jKUaqNLSq2Nn6GLC4kaIlmt+aESBXlN2kTThUKtYk0Nkeyt5WXFD3nE47WgmqZVrTEeIrmzVh+CRdJ1LWtDanRtRj9Ecmd9TN0ytAR08bOmfjA1RHJvXW6/ALVY3a9bKPEQwHiI5DvWxUNBa3LmGX1plVm5qLU+qCGSnbkfKp7GM7SW9Ku2wJq5PckPybbPAwDkNqkC61giI6wvinjdBdbnnCfJA8i6lrVIOsNKjjXEduW0/gf9EMnO+lTLi4qqXVWoSKqdL2M8RHJvfT0xoYimdFprcpbKxiLu/SD5jnUaqluHOt9klzWjb86IGiLp5nrJ6JsbXZN1Z4EaInlv9VzHoAAUAgzaTkdL0G3U+F+ChAUQTNm+nW2eJI8jTUMumiEjzr9GBbZRwusIxKan9WL//vU9ST4lWWMfYH1Rkdm7r93xxMmXu29/WpIPSfp7P9R2TL+KANhEF2z20iE/ffaid+R3PC3JxybX0SLpch7RS0Pelt3kQ/Lz9yT5VGScN5Gb73sVmQeVGzax0lC8stdB8s7u3/shAKBYL4qQLkBYthHAkCX8vGQJCZ61nWueJI8j333vh580w+5s0H4DCOtDJIsJ33FOkiRJkiRJkvzHyd9o/I1bU5yxUwAAAABJRU5ErkJggg==', '2026-05-22', '2027-05-22', 'activa');
-
 -- --------------------------------------------------------
 
 --
@@ -117,10 +123,18 @@ CREATE TABLE `usuario` (
   `id_usuario` int NOT NULL,
   `username` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `password_hash` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `rol` enum('admin') COLLATE utf8mb4_unicode_ci DEFAULT 'admin',
+  `rol` enum('admin','funcionario') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'funcionario',
   `estado` enum('activo','inactivo') COLLATE utf8mb4_unicode_ci DEFAULT 'activo',
-  `fecha_creacion` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+  `fecha_creacion` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `usuario`
+--
+
+INSERT INTO `usuario` (`id_usuario`, `username`, `password_hash`, `rol`, `estado`, `fecha_creacion`, `email`) VALUES
+(3, 'admin', '$2b$14$25h50/7DZyI9wQtkIFGSHeR/Nih03H3NYsP931h9.NUC54umSea4S', 'admin', 'activo', '2026-06-09 07:58:38', 'user@example.com');
 
 --
 -- Índices para tablas volcadas
@@ -174,25 +188,25 @@ ALTER TABLE `auditoria`
 -- AUTO_INCREMENT de la tabla `beneficios`
 --
 ALTER TABLE `beneficios`
-  MODIFY `id_beneficio` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id_beneficio` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `persona`
 --
 ALTER TABLE `persona`
-  MODIFY `id_persona` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_persona` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT de la tabla `tarjeta`
 --
 ALTER TABLE `tarjeta`
-  MODIFY `id_tarjeta` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_tarjeta` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `id_usuario` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id_usuario` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Restricciones para tablas volcadas
