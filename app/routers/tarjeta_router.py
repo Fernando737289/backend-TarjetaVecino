@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 
 from app.models.tarjeta_model import CreateTarjetaRequest, UpdateTarjetaRequest
 from app.services.tarjeta_service import (
@@ -7,6 +7,7 @@ from app.services.tarjeta_service import (
     update_tarjeta,
     delete_tarjeta
 )
+from app.core.dependencies import require_admin
 
 router = APIRouter(
     prefix="/tarjeta",
@@ -15,7 +16,10 @@ router = APIRouter(
 
 
 @router.post("/crear")
-def crear_tarjeta(data: CreateTarjetaRequest):
+def crear_tarjeta(
+    data: CreateTarjetaRequest,
+    admin = Depends(require_admin)
+):
 
     return create_tarjeta(
         data.rut,
@@ -39,7 +43,11 @@ def obtener_tarjeta(
 
 
 @router.put("/{id_tarjeta}")
-def actualizar_tarjeta(id_tarjeta: int, data: UpdateTarjetaRequest):
+def actualizar_tarjeta(
+    id_tarjeta: int, 
+    data: UpdateTarjetaRequest,
+    admin = Depends(require_admin)
+):
 
     return update_tarjeta(
         id_tarjeta,
@@ -49,6 +57,9 @@ def actualizar_tarjeta(id_tarjeta: int, data: UpdateTarjetaRequest):
 
 
 @router.delete("/{id_tarjeta}")
-def eliminar_tarjeta(id_tarjeta: int):
+def eliminar_tarjeta(
+    id_tarjeta: int,
+    admin = Depends(require_admin)
+):
 
     return delete_tarjeta(id_tarjeta)
