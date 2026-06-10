@@ -1,4 +1,8 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
+from slowapi.util import get_remote_address
+
 from app.routers import (
     db_conection,
     users,
@@ -21,6 +25,15 @@ app.include_router(beneficio_router.router)
 app.include_router(verificacion_router.router)
 app.include_router(Outh_router.router)
 app.include_router(auth_router.router)
+
+limiter = Limiter(key_func=get_remote_address)
+
+app.state.limiter = limiter
+
+app.add_exception_handler(
+    RateLimitExceeded,
+    _rate_limit_exceeded_handler
+)
 
 app.add_middleware(
     CORSMiddleware,

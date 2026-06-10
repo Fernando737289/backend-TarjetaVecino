@@ -1,3 +1,5 @@
+from app.core.encryption import encrypt_data
+
 from app.core.database import get_connection
 from fastapi import HTTPException
 from app.services.dec_services import validar_vigencia_rut
@@ -59,9 +61,13 @@ async def create_user(user):
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
         """
         
+        serial_encriptado = encrypt_data(
+            user.serial_number
+        )
+        
         values = (
             user.rut,
-            user.serial_number,
+            serial_encriptado,
             user.nombres,
             user.apellidos,
             user.direccion,
@@ -99,7 +105,21 @@ def list_users():
     
         cursor = conexion.cursor(dictionary=True)
     
-        query = "SELECT * FROM persona"
+        query = """
+            SELECT
+                id_persona,
+                rut,
+                nombres,
+                apellidos,
+                direccion,
+                numero_direccion,
+                telefono,
+                email,
+                fecha_nacimiento,
+                estado,
+                fecha_creacion
+            FROM persona
+        """
     
         cursor.execute(query)
     
