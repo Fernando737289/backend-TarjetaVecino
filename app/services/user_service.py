@@ -1,5 +1,4 @@
 from app.core.encryption import encrypt_data
-
 from app.core.database import get_connection
 from fastapi import HTTPException
 from app.services.dec_services import validar_vigencia_rut
