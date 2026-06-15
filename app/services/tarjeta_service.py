@@ -123,6 +123,7 @@ def create_tarjeta(
         
         return {
             "id_tarjeta": id_tarjeta,
+            "numero_tarjeta": numero_tarjeta,
             "mensaje": "Tarjeta creada correctamente"
         }
 
@@ -214,7 +215,6 @@ def get_tarjeta(
             "vigencia": tarjeta["fecha_vencimiento"],
             "estado": tarjeta["estado"]
         }
-
     except HTTPException:
         raise
 
