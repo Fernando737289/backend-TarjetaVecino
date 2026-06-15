@@ -87,17 +87,3 @@ http://127.0.0.1:8000
 http://127.0.0.1:8000/docs
 ```
 
-## Características implementadas
-
-* Autenticación mediante JWT.
-* Roles de usuario (`admin` y `funcionario`).
-* Protección de rutas mediante token.
-* Hash de contraseñas con bcrypt.
-* Rate limiting para prevenir ataques de fuerza bruta.
-* Validación de vigencia de cédula mediante API externa.
-* Cifrado del número de serie de la cédula mediante Fernet.
-* Historial de canje de beneficios.
-* Auditoría de acciones realizadas en el sistema.
-
-```
-```
