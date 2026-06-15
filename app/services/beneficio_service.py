@@ -158,3 +158,33 @@ def update_beneficio(id_beneficio: int, data):
             status_code=500,
             detail="Error al actualizar beneficio"
         )
+        
+def obtener_historial_beneficios():
+
+    conexion = get_connection()
+
+    cursor = conexion.cursor(dictionary=True)
+
+    query = """
+        SELECT
+            p.rut,
+            p.nombres,
+            b.nombre,
+            b.comercio,
+            h.fecha_uso
+        FROM historial_beneficios h
+        INNER JOIN persona p
+            ON h.id_persona = p.id_persona
+        INNER JOIN beneficios b
+            ON h.id_beneficio = b.id_beneficio
+        ORDER BY h.fecha_uso DESC
+    """
+
+    cursor.execute(query)
+
+    resultado = cursor.fetchall()
+
+    cursor.close()
+    conexion.close()
+
+    return resultado

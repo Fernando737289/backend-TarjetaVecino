@@ -5,7 +5,8 @@ from app.services.beneficio_service import (
     create_beneficio,
     list_beneficios,
     update_beneficio,
-    delete_beneficio
+    delete_beneficio,
+    obtener_historial_beneficios
 )
 from app.core.dependencies import require_admin
 
@@ -21,6 +22,11 @@ def crear_beneficio(
 ):
 
     return create_beneficio(data)
+
+@router.get("/historial")
+def obtener_historial_be():
+
+    return obtener_historial_beneficios()
 
 @router.get("/")
 def obtener_beneficios():
