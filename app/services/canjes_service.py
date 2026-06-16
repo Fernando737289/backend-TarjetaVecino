@@ -1,91 +1,125 @@
 from app.core.database import get_connection
-from fastapi import HTTPException, status
+from fastapi import HTTPException
 
-async def registrar_canje_seguro(rut_vecino: str, nombre_beneficio: str, descripcion: str):
+
+def canjear_beneficio(
+    rut: str,
+    id_beneficio: int
+):
+    
     conexion = get_connection()
     cursor = conexion.cursor(dictionary=True)
-    
+
     try:
 
-        query_tarjeta = "SELECT t.id_tarjeta FROM persona p INNER JOIN tarjeta t ON p.id_persona = t.id_persona WHERE p.rut = %s AND t.estado = 'activa'"
-        cursor.execute(query_tarjeta, (rut_vecino,))
-        tarjeta_vecino = cursor.fetchone()
         
-        if not tarjeta_vecino:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail=f"Error: El vecino con RUT '{rut_vecino}' no tiene una tarjeta activa registrada en el sistema."
-            )
-        
-        id_tarjeta = tarjeta_vecino['id_tarjeta']
+        cursor.execute(
+            """
+            SELECT id_persona
+            FROM persona
+            WHERE rut = %s
+            """,
+            (rut,)
+        )
 
-        query_beneficio = "SELECT id_beneficio, id_tarjeta, nombre FROM beneficios WHERE nombre = %s"
-        cursor.execute(query_beneficio, (nombre_beneficio,))
-        beneficio = cursor.fetchone()
+        persona = cursor.fetchone()
+
+        if not persona:
+            raise HTTPException(
+                status_code=404,
+                detail="Persona no encontrada"
+            )
+
         
+        cursor.execute(
+            """
+            SELECT *
+            FROM beneficios
+            WHERE id_beneficio = %s
+            """,
+            (id_beneficio,)
+        )
+
+        beneficio = cursor.fetchone()
+
         if not beneficio:
             raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail=f"El beneficio {nombre_beneficio} no existe en el catálogo."
+                status_code=404,
+                detail="Beneficio no encontrado"
             )
-            
-        if beneficio['id_tarjeta'] is not None:
+
+        
+        if beneficio["stock"] <= 0:
+
             raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"Error: El beneficio '{beneficio['nombre']}' ya fue cobrado por otra tarjeta y no está disponible."
+                status_code=400,
+                detail="Beneficio sin stock"
             )
             
+        cursor.execute(
+            """
+            SELECT id_historial
+            FROM historial_beneficios
+            WHERE id_persona = %s
+            AND id_beneficio = %s
+            """,
+            (
+                persona["id_persona"],
+                id_beneficio
+            )
+        )
 
-        query_cobrar = """
-            UPDATE beneficios 
-            SET id_tarjeta = %s, descripcion = %s, estado = 'inactivo'
+        canje_existente = cursor.fetchone()
+
+        if canje_existente:
+            raise HTTPException(
+                status_code=400,
+                detail="Este beneficio ya fue canjeado por esta persona"
+            )
+  
+
+        
+        cursor.execute(
+            """
+            UPDATE beneficios
+            SET stock = stock - 1
             WHERE id_beneficio = %s
-        """
-        cursor.execute(query_cobrar, (id_tarjeta, descripcion, beneficio['id_beneficio']))
-        
+            """,
+            (id_beneficio,)
+        )
 
-        query_auditoria = """
-            INSERT INTO auditoria (tabla_afectada, accion_realizada, descripcion, usuario_accion)
-            VALUES (%s, %s, %s, %s)
-        """
-        detalle_log = f"Beneficio ID {nombre_beneficio} ('{beneficio['nombre']}') COBRADO por RUT {rut_vecino} (Tarjeta ID {id_tarjeta})"
-        cursor.execute(query_auditoria, ("beneficios", "UPDATE", detalle_log, "sistema_backend"))
-        
+        cursor.execute(
+            """
+            INSERT INTO historial_beneficios(
+                id_persona,
+                id_beneficio
+            )
+            VALUES(%s,%s)
+            """,
+            (
+                persona["id_persona"],
+                id_beneficio
+            )
+        )
+                
         conexion.commit()
-        return {"status": "success", "message": f"¡Beneficio '{beneficio['nombre']}' cobrado con éxito por el vecino RUT {rut_vecino}!"}
-        
-    except HTTPException as http_err:
-        raise http_err
+
+        return {
+            "mensaje": "Beneficio canjeado correctamente"
+        }
+
+    except HTTPException:
+        raise
+
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error interno en el servidor: {str(e)}")
+
+        raise HTTPException(
+            status_code=500,
+            detail=str(e)
+
+        )
+
     finally:
-        cursor.close()
-        conexion.close()
 
-
-async def obtener_vista_historial():
-    conexion = get_connection()
-    cursor = conexion.cursor(dictionary=True)
-    try:
-
-        query_vista = """
-            SELECT 
-                b.id_beneficio,
-                b.nombre AS nombre_beneficio,
-                b.descripcion AS detalle_canje,
-                t.numero_tarjeta,
-                p.rut AS rut_vecino,
-                p.nombres AS nombre_vecino,
-                p.apellidos AS apellido_vecino
-            FROM beneficios b
-            INNER JOIN tarjeta t ON b.id_tarjeta = t.id_tarjeta
-            INNER JOIN persona p ON t.id_persona = p.id_persona
-            ORDER BY b.id_beneficio DESC
-        """
-        cursor.execute(query_vista)
-        return cursor.fetchall()
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error al generar el historial relacional: {str(e)}")
-    finally:
         cursor.close()
         conexion.close()
