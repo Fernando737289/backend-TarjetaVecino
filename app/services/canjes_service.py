@@ -87,10 +87,11 @@ def canjear_beneficio(
             """,
             (id_beneficio,)
         )
+        
+        codigo_canje = generar_codigo_canje()
 
         cursor.execute(
             """
-            codigo_canje = generar_codigo_canje(
             INSERT INTO historial_beneficios(
                 id_persona,
                 id_beneficio,
@@ -101,7 +102,7 @@ def canjear_beneficio(
             (
                 persona["id_persona"],
                 id_beneficio,
-                generar_codigo_canje
+                codigo_canje
             )
         )
                 
