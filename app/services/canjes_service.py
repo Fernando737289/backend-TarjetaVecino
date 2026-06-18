@@ -1,9 +1,9 @@
 from app.core.database import get_connection
 from fastapi import HTTPException
-
+from app.core.generador_codigo import generar_codigo_canje
 
 def canjear_beneficio(
-    rut: str,
+    id_persona: int,
     id_beneficio: int
 ):
     
@@ -17,9 +17,9 @@ def canjear_beneficio(
             """
             SELECT id_persona
             FROM persona
-            WHERE rut = %s
+            WHERE id_persona = %s
             """,
-            (rut,)
+            (id_persona,)
         )
 
         persona = cursor.fetchone()
@@ -90,15 +90,18 @@ def canjear_beneficio(
 
         cursor.execute(
             """
+            codigo_canje = generar_codigo_canje(
             INSERT INTO historial_beneficios(
                 id_persona,
-                id_beneficio
+                id_beneficio,
+                codigo_canje
             )
-            VALUES(%s,%s)
+            VALUES(%s,%s,%s)
             """,
             (
                 persona["id_persona"],
-                id_beneficio
+                id_beneficio,
+                generar_codigo_canje
             )
         )
                 
