@@ -9,10 +9,10 @@ router = APIRouter(
 
 @router.post("/canjear")
 def canjear(
-    rut: str,
+    id_persona: int,
     id_beneficio: int
 ):
     return canjear_beneficio(
-        rut,
+        id_persona,
         id_beneficio
     )
