@@ -12,7 +12,7 @@ def obtener_historial_persona(id_persona: int):
 
         query = """
             SELECT
-
+                h.id_historial,
                 h.codigo_canje,
                 h.fecha_uso,
 
@@ -43,7 +43,15 @@ def obtener_historial_persona(id_persona: int):
         cursor.close()
         conexion.close()
 
-        return historial
+        return [
+            {
+                "beneficio": item["nombre"],
+                "fecha_uso": item["fecha_uso"],
+                "codigo_canje": f"MUN-{item['id_historial']}",
+                "descuento": item["valor_descuento"]
+            }
+                for item in historial
+        ]
 
     except Exception:
 
