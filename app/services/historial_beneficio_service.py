@@ -47,10 +47,11 @@ def obtener_historial_persona(id_persona: int):
             {
                 "beneficio": item["nombre"],
                 "fecha_uso": item["fecha_uso"],
-                "codigo_canje": f"MUN-{item['id_historial']}",
-                "descuento": item["valor_descuento"]
+                "codigo_canje": item["codigo_canje"],
+                "descuento": item["valor_descuento"],
+                "comercio": item["comercio"]
             }
-                for item in historial
+            for item in historial
         ]
 
     except Exception:
