@@ -56,6 +56,7 @@ def generar_qr(persona):
     Nombre: {persona['nombres']}
     Apellidos: {persona['apellidos']}
     """
+    
     qr = qrcode.QRCode(
         version=1,
         error_correction=qrcode.constants.ERROR_CORRECT_L,

@@ -30,18 +30,19 @@ def verificar_tarjeta_existente(id_persona: int):
 
     return tarjeta
 
-
 def create_tarjeta(
     rut: str,
     nombres: str,
     apellidos: str,
     telefono: str | None = None
 ):
+
     
     try:
         
         persona = get_persona_by_rut(rut)
         
+
         if persona["nombres"].strip().lower() != nombres.strip().lower():
 
             raise HTTPException(
@@ -66,7 +67,7 @@ def create_tarjeta(
                     status_code=400,
                     detail="El teléfono no coincide con los registros"
                 )
-        
+
         tarjeta_existente = verificar_tarjeta_existente(
             persona["id_persona"]
         )
@@ -122,6 +123,7 @@ def create_tarjeta(
         
         return {
             "id_tarjeta": id_tarjeta,
+            "numero_tarjeta": numero_tarjeta,
             "mensaje": "Tarjeta creada correctamente"
         }
 
@@ -135,16 +137,25 @@ def create_tarjeta(
             detail=f"Error al crear tarjeta: {str(e)}"
         )
         
-        
-def get_tarjeta(rut: str):
-    
-    
+
+def get_tarjeta(
+    rut: str | None = None,
+    numero_tarjeta: str | None = None
+):
+
     try:
-        
+
+        if not rut and not numero_tarjeta:
+
+            raise HTTPException(
+                status_code=400,
+                detail="Debe ingresar un rut o un número de tarjeta"
+            )
+
         conexion = get_connection()
-        
+
         cursor = conexion.cursor(dictionary=True)
-        
+
         query = """
             SELECT
                 t.id_tarjeta,
@@ -158,46 +169,60 @@ def get_tarjeta(rut: str):
                 p.nombres,
                 p.apellidos,
                 p.telefono
-            
+
             FROM tarjeta t
-            
+
             INNER JOIN persona p
                 ON t.id_persona = p.id_persona
-                
-            WHERE p.rut = %s
+
+            WHERE 1 = 1
         """
-        
-        cursor.execute(query, (rut,))
-        
+
+        params = []
+
+        if rut:
+
+            query += " AND p.rut = %s"
+
+            params.append(rut)
+
+        if numero_tarjeta:
+
+            query += " AND t.numero_tarjeta = %s"
+
+            params.append(numero_tarjeta)
+
+        cursor.execute(query, tuple(params))
+
         tarjeta = cursor.fetchone()
-        
+
         cursor.close()
         conexion.close()
-        
+
         if not tarjeta:
-            
+
             raise HTTPException(
                 status_code=404,
                 detail="Tarjeta no encontrada"
             )
-            
+
         return {
             "nombres": tarjeta["nombres"],
             "apellidos": tarjeta["apellidos"],
             "rut": tarjeta["rut"],
             "numero_tarjeta": tarjeta["numero_tarjeta"],
             "codigo_qr": tarjeta["codigo_qr"],
-            "vigencia": tarjeta["fecha_vencimiento"]
+            "vigencia": tarjeta["fecha_vencimiento"],
+            "estado": tarjeta["estado"]
         }
-    
     except HTTPException:
         raise
-    
-    except Exception:
-        
+
+    except Exception as e:
+
         raise HTTPException(
             status_code=500,
-            detail="Error al obtener la tarjeta"
+            detail=f"Error al obtener la tarjeta: {str(e)}"
         )
         
         
@@ -328,5 +353,5 @@ def delete_tarjeta(id_tarjeta: int):
 
         raise HTTPException(
             status_code=500,
-             detail="Error al eliminar la tarjeta"
+            detail="Error al eliminar la tarjeta"
         )
