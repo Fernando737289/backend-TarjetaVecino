@@ -8,6 +8,7 @@ from app.services.beneficio_service import (
     delete_beneficio
 )
 from app.core.dependencies import require_admin
+from app.core.auditoria import registrar_auditoria
 
 router = APIRouter(
     prefix="/beneficios",
@@ -20,7 +21,16 @@ def crear_beneficio(
     admin = Depends(require_admin)
 ):
 
-    return create_beneficio(data)
+    resultado = create_beneficio(data)
+
+    registrar_auditoria(
+        "beneficios",
+        "CREATE",
+        f"Se creo el beneficio {data.nombre}",
+        admin["sub"]
+    )
+
+    return resultado
 
 @router.get("/")
 def obtener_beneficios():
@@ -29,12 +39,21 @@ def obtener_beneficios():
 
 @router.put("/actualizar/{id_beneficio}")
 def actualizar_beneficio(
-    id_beneficio: int, 
+    id_beneficio: int,
     data: Beneficio,
     admin = Depends(require_admin)
 ):
 
-    return update_beneficio(id_beneficio, data)
+    resultado = update_beneficio(id_beneficio, data)
+
+    registrar_auditoria(
+        "beneficios",
+        "UPDATE",
+        f"Se actualizo el beneficio {id_beneficio}",
+        admin["sub"]
+    )
+
+    return resultado
 
 
 @router.delete("/eliminar/{id_beneficio}")
@@ -43,4 +62,13 @@ def eliminar_beneficio(
     admin = Depends(require_admin)
 ):
 
-    return delete_beneficio(id_beneficio)
+    resultado = delete_beneficio(id_beneficio)
+
+    registrar_auditoria(
+        "beneficios",
+        "DELETE",
+        f"Se elimino el beneficio {id_beneficio}",
+        admin["sub"]
+    )
+
+    return resultado

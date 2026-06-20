@@ -46,3 +46,5 @@ def registrar_auditoria(
 
         if 'conexion' in locals():
             conexion.close()
+
+            
