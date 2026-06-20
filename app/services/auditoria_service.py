@@ -2,12 +2,10 @@ from app.core.database import get_connection
 
 
 def registrar_auditoria(
-         id_auditoria
-         tabla_afectada
-         accion_realizada
-         descripcion
-         usuario_accion
-         fecha_accion
+    tabla_afectada: str,
+    accion_realizada: str,
+    descripcion: str,
+    usuario_accion: str
 ):
 
     conexion = get_connection()
@@ -16,25 +14,21 @@ def registrar_auditoria(
 
     query = """
         INSERT INTO auditoria(
-            id_auditoria
-            tabla_afectada
-            accion_realizada
-            descripcion
+            tabla_afectada,
+            accion_realizada,
+            descripcion,
             usuario_accion
-            fecha_accion
         )
-        VALUES(%s,%s,%s,%s,%s)
+        VALUES(%s,%s,%s,%s)
     """
 
     cursor.execute(
         query,
         (
-            id_auditoria
-            tabla_afectada
-            accion_realizada
-            descripcion
+            tabla_afectada,
+            accion_realizada,
+            descripcion,
             usuario_accion
-            fecha_accion
         )
     )
 

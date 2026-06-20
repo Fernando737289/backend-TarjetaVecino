@@ -241,3 +241,60 @@ def delete_user(id_persona):
             detail = "Error al eliminar usuario"
         )
       
+def update_estado_persona(
+    id_persona: int,
+    estado: str
+):
+
+    try:
+
+        if estado not in ["activo", "inactivo"]:
+
+            raise HTTPException(
+                status_code=400,
+                detail="Estado inválido"
+            )
+
+        conexion = get_connection()
+
+        cursor = conexion.cursor(dictionary=True)
+
+        query = """
+            UPDATE persona
+            SET estado = %s
+            WHERE id_persona = %s
+        """
+
+        cursor.execute(
+            query,
+            (
+                estado,
+                id_persona
+            )
+        )
+
+        conexion.commit()
+
+        if cursor.rowcount == 0:
+
+            raise HTTPException(
+                status_code=404,
+                detail="Persona no encontrada"
+            )
+
+        cursor.close()
+        conexion.close()
+
+        return {
+            "mensaje": f"Persona {estado} correctamente"
+        }
+
+    except HTTPException:
+        raise
+
+    except Exception:
+
+        raise HTTPException(
+            status_code=500,
+            detail="Error al actualizar estado"
+        )       

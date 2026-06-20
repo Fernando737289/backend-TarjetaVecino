@@ -1,7 +1,7 @@
-from fastapi import Depends
+from fastapi import APIRouter, Depends
 from app.services.auditoria_service import registrar_auditoria
-from app.models.user import User
-from app.services.user_service import create_user, list_users, update_user, delete_user
+from app.models.user import User, UpdateEstadoPersonaRequest
+from app.services.user_service import create_user, list_users, update_user, delete_user, update_estado_persona
 from app.core.dependencies import require_admin
 
 router = APIRouter(

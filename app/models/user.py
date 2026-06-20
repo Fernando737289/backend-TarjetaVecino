@@ -15,4 +15,7 @@ class User(BaseModel):
     telefono: str | None = None
     email: EmailStr | None = None
     fecha_nacimiento: date | None = None
-    
+
+class UpdateEstadoPersonaRequest(BaseModel):
+
+    estado: str    
