@@ -240,7 +240,7 @@ def delete_user(id_persona):
             status_code = 500,
             detail = "Error al eliminar usuario"
         )
-      
+    
 def update_estado_persona(
     id_persona: int,
     estado: str
