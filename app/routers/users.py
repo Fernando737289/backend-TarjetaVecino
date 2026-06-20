@@ -11,6 +11,7 @@ from app.services.user_service import (
     update_estado_persona
 )
 from app.core.dependencies import require_admin
+from app.services.auditoria_service import registrar_auditoria
 
 router = APIRouter(
     prefix="/users",
@@ -28,7 +29,18 @@ async def registrar_usuario(
     payload: User,
     admin = Depends(require_admin)
 ):
-    return await create_user(payload)
+
+    resultado = await create_user(payload)
+
+    registrar_auditoria(
+        id_usuario=admin["id_usuario"],
+        username=admin["sub"],
+        accion="CREATE",
+        modulo="PERSONA",
+        descripcion=f"Creó persona con RUT {payload.rut}"
+    )
+
+    return resultado
 
 # actualizar persona (Solo admin) 
 @router.put("/{id_persona}")
@@ -52,10 +64,20 @@ def delete_users(
 def cambiar_estado_persona(
     id_persona: int,
     data: UpdateEstadoPersonaRequest,
-    admin = Depends(require_admin)
+    usuario = Depends(require_admin)
 ):
 
-    return update_estado_persona(
+    resultado = update_estado_persona(
         id_persona,
         data.estado
     )
+
+    registrar_auditoria(
+        id_usuario=usuario["id_usuario"],
+        username=usuario["sub"],
+        accion="UPDATE",
+        modulo="PERSONA",
+        descripcion=f"Cambio estado persona {id_persona} a {data.estado}"
+    )
+
+    return resultado
