@@ -51,7 +51,8 @@ def delete_users(
 @router.patch("/{id_persona}/estado")
 def cambiar_estado_persona(
     id_persona: int,
-    data: UpdateEstadoPersonaRequest
+    data: UpdateEstadoPersonaRequest,
+    admin = Depends(require_admin)
 ):
 
     return update_estado_persona(
