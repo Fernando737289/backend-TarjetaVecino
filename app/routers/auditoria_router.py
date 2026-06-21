@@ -13,5 +13,5 @@ router = APIRouter(
 def obtener_auditoria(
     admin=Depends(require_admin)
 ):
-
+    
     return list_auditoria()

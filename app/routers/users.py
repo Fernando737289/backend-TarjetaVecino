@@ -33,11 +33,10 @@ async def registrar_usuario(
     resultado = await create_user(payload)
 
     registrar_auditoria(
-        id_usuario=admin["id_usuario"],
-        username=admin["sub"],
-        accion="CREATE",
-        modulo="PERSONA",
-        descripcion=f"Creó persona con RUT {payload.rut}"
+        tabla_afectada="persona",
+        accion_realizada="INSERT",
+        descripcion=f"Se registró la persona {payload.rut}",
+        usuario_accion=admin["sub"]
     )
 
     return resultado
@@ -73,11 +72,10 @@ def cambiar_estado_persona(
     )
 
     registrar_auditoria(
-        id_usuario=usuario["id_usuario"],
-        username=usuario["sub"],
-        accion="UPDATE",
-        modulo="PERSONA",
-        descripcion=f"Cambio estado persona {id_persona} a {data.estado}"
+        tabla_afectada="persona",
+        accion_realizada="UPDATE",
+        descripcion=f"Se cambió el estado de la persona ID {id_persona} a '{data.estado}'",
+        usuario_accion=admin["sub"]
     )
 
     return resultado
