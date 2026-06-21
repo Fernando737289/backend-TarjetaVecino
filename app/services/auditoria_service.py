@@ -1,3 +1,4 @@
+from fastapi import HTTPException
 from app.core.database import get_connection
 
 
@@ -36,3 +37,101 @@ def registrar_auditoria(
 
     cursor.close()
     conexion.close()
+    def list_auditoria():
+
+    try:
+
+        conexion = get_connection()
+
+        cursor = conexion.cursor(dictionary=True)
+
+        query = """
+            SELECT
+                tabla_afectada,
+                accion_realizada,
+                descripcion,
+                usuario_accion,
+                fecha_accion
+            FROM auditoria
+            ORDER BY fecha_accion DESC
+        """
+
+        cursor.execute(query)
+
+        auditorias = cursor.fetchall()
+
+        cursor.close()
+        conexion.close()
+
+        def list_auditoria():
+
+    try:
+
+        conexion = get_connection()
+
+        cursor = conexion.cursor(dictionary=True)
+
+        query = """
+            SELECT
+                tabla_afectada,
+                accion_realizada,
+                descripcion,
+                usuario_accion,
+                fecha_accion
+            FROM auditoria
+            ORDER BY fecha_accion DESC
+        """
+
+        cursor.execute(query)
+
+        auditorias = cursor.fetchall()
+
+        cursor.close()
+        conexion.close()
+
+        return auditorias
+
+    except Exception:
+
+        raise HTTPException(
+            status_code=500,
+            detail="Error al obtener auditorias"
+        )
+        from fastapi import HTTPException
+from app.core.database import get_connection
+
+
+def list_auditoria():
+
+    try:
+
+        conexion = get_connection()
+
+        cursor = conexion.cursor(dictionary=True)
+
+        query = """
+            SELECT
+                tabla_afectada,
+                accion_realizada,
+                descripcion,
+                usuario_accion,
+                fecha_accion
+            FROM auditoria
+            ORDER BY fecha_accion DESC
+        """
+
+        cursor.execute(query)
+
+        resultado = cursor.fetchall()
+
+        cursor.close()
+        conexion.close()
+
+        return resultado
+
+    except Exception:
+
+        raise HTTPException(
+            status_code=500,
+            detail="Error al obtener auditoría"
+        )
