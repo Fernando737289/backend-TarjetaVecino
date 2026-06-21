@@ -2,8 +2,6 @@ from fastapi import FastAPI, Request
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 from slowapi.util import get_remote_address
-from app.routers.canjes_router import router as canjes_router
-from app.routers import auditoria_router
 
 from app.routers import (
     db_conection,
@@ -13,7 +11,9 @@ from app.routers import (
     beneficio_router,
     verificacion_router,
     Outh_router,
-    auth_router
+    auth_router,
+    auditoria_router,
+    canjes_router
 )
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -27,7 +27,7 @@ app.include_router(beneficio_router.router)
 app.include_router(verificacion_router.router)
 app.include_router(Outh_router.router)
 app.include_router(auth_router.router)
-app.include_router(canjes_router)
+app.include_router(canjes_router.router)
 app.include_router(auditoria_router.router)
 
 limiter = Limiter(key_func=get_remote_address)

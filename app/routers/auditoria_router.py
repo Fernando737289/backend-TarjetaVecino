@@ -1,4 +1,4 @@
-ffrom fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends
 
 from app.services.auditoria_service import list_auditoria
 from app.core.dependencies import require_admin
