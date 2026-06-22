@@ -1,14 +1,9 @@
 from fastapi import APIRouter, Depends
 from app.models.user import (
-    User,
-    UpdateEstadoPersonaRequest
+    User, UpdateEstadoPersonaRequest
 )
 from app.services.user_service import (
-    create_user,
-    list_users,
-    update_user,
-    delete_user,
-    update_estado_persona
+    create_user, list_users, update_user, delete_user, update_estado_persona
 )
 from app.core.dependencies import require_admin
 from app.services.auditoria_service import registrar_auditoria
@@ -18,16 +13,14 @@ router = APIRouter(
     tags=["Users"]
 )
 
-#rListar personas (publico)
 @router.get("/")
 def list_all_users():
     return list_users()
 
-# Crear persona (Solo admin) 
 @router.post("/usuarios")
 async def registrar_usuario(
     payload: User,
-    admin = Depends(require_admin)
+    admin=Depends(require_admin)
 ):
 
     resultado = await create_user(payload)
@@ -35,35 +28,55 @@ async def registrar_usuario(
     registrar_auditoria(
         tabla_afectada="persona",
         accion_realizada="INSERT",
-        descripcion=f"Se registró la persona {payload.rut}",
+        descripcion=f"Se registró la persona con RUT {payload.rut}",
         usuario_accion=admin["sub"]
     )
 
     return resultado
 
-# actualizar persona (Solo admin) 
 @router.put("/{id_persona}")
 def update_users(
-    id_persona: int, 
+    id_persona: int,
     user: User,
-    admin = Depends(require_admin)
+    admin=Depends(require_admin)
 ):
-    return update_user(id_persona, user)
 
+    resultado = update_user(
+        id_persona,
+        user
+    )
 
-# eliminar persona (Solo admin) 
+    registrar_auditoria(
+        tabla_afectada="persona",
+        accion_realizada="UPDATE",
+        descripcion=f"Se actualizó la persona ID {id_persona}",
+        usuario_accion=admin["sub"]
+    )
+
+    return resultado
+
 @router.delete("/{id_persona}")
 def delete_users(
     id_persona: int,
-    admin = Depends(require_admin)
+    admin=Depends(require_admin)
 ):
-    return delete_user(id_persona)
+
+    resultado = delete_user(id_persona)
+
+    registrar_auditoria(
+        tabla_afectada="persona",
+        accion_realizada="DELETE",
+        descripcion=f"Se eliminó la persona ID {id_persona}",
+        usuario_accion=admin["sub"]
+    )
+
+    return resultado
 
 @router.patch("/{id_persona}/estado")
 def cambiar_estado_persona(
     id_persona: int,
     data: UpdateEstadoPersonaRequest,
-    usuario = Depends(require_admin)
+    admin=Depends(require_admin)
 ):
 
     resultado = update_estado_persona(
