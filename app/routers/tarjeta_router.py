@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Depends
-
 from app.models.tarjeta_model import CreateTarjetaRequest, UpdateTarjetaRequest
 from app.services.tarjeta_service import (
     create_tarjeta,
@@ -7,6 +6,7 @@ from app.services.tarjeta_service import (
     update_tarjeta,
     delete_tarjeta
 )
+from app.services.auditoria_service import registrar_auditoria
 from app.core.dependencies import require_admin
 
 router = APIRouter(
@@ -14,20 +14,27 @@ router = APIRouter(
     tags=["Tarjeta"]
 )
 
-
 @router.post("/crear")
 def crear_tarjeta(
     data: CreateTarjetaRequest,
-    admin = Depends(require_admin)
+    admin=Depends(require_admin)
 ):
 
-    return create_tarjeta(
+    resultado = create_tarjeta(
         data.rut,
         data.nombres,
         data.apellidos,
         data.telefono
     )
 
+    registrar_auditoria(
+        tabla_afectada="tarjeta",
+        accion_realizada="INSERT",
+        descripcion=f"Se creó una tarjeta para el RUT {data.rut}",
+        usuario_accion=admin["sub"]
+    )
+
+    return resultado
 
 @router.get("/buscar")
 def obtener_tarjeta(
@@ -40,26 +47,41 @@ def obtener_tarjeta(
         numero_tarjeta=numero_tarjeta
     )
 
-
-
 @router.put("/{id_tarjeta}")
 def actualizar_tarjeta(
-    id_tarjeta: int, 
+    id_tarjeta: int,
     data: UpdateTarjetaRequest,
-    admin = Depends(require_admin)
+    admin=Depends(require_admin)
 ):
 
-    return update_tarjeta(
+    resultado = update_tarjeta(
         id_tarjeta,
         data.estado,
         data.fecha_vencimiento
     )
 
+    registrar_auditoria(
+        tabla_afectada="tarjeta",
+        accion_realizada="UPDATE",
+        descripcion=f"Se actualizó la tarjeta ID {id_tarjeta}",
+        usuario_accion=admin["sub"]
+    )
+
+    return resultado
 
 @router.delete("/{id_tarjeta}")
 def eliminar_tarjeta(
     id_tarjeta: int,
-    admin = Depends(require_admin)
+    admin=Depends(require_admin)
 ):
 
-    return delete_tarjeta(id_tarjeta)
+    resultado = delete_tarjeta(id_tarjeta)
+
+    registrar_auditoria(
+        tabla_afectada="tarjeta",
+        accion_realizada="DELETE",
+        descripcion=f"Se eliminó la tarjeta ID {id_tarjeta}",
+        usuario_accion=admin["sub"]
+    )
+
+    return resultado

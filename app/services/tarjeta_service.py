@@ -164,12 +164,12 @@ def get_tarjeta(
                 t.fecha_emision,
                 t.fecha_vencimiento,
                 t.estado,
+                t.id_persona,
 
                 p.rut,
                 p.nombres,
                 p.apellidos,
                 p.telefono
-
             FROM tarjeta t
 
             INNER JOIN persona p
@@ -207,6 +207,7 @@ def get_tarjeta(
             )
 
         return {
+            "id_persona": tarjeta["id_persona"],
             "nombres": tarjeta["nombres"],
             "apellidos": tarjeta["apellidos"],
             "rut": tarjeta["rut"],
