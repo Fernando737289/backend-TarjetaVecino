@@ -65,7 +65,7 @@ FERNET_KEY=valor_generado
 
 ## Base de datos
 
-Importar el archivo SQL incluido en el proyecto utilizando MySQL o phpMyAdmin.
+Importar el archivo SQL incluido en el proyecto utilizando MySQL o mariaDB.
 
 El script crea automáticamente la base de datos, las tablas y sus relaciones.
 
